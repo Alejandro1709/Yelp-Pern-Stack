@@ -20,6 +20,10 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello Api');
 });
 
+app.get('/api/v1/restaurants', (req: Request, res: Response) => {
+  res.send('Getting Restaurants');
+});
+
 const port = process.env.PORT || 3020;
 
 app.listen(port, () =>
