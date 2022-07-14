@@ -23,8 +23,20 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/api/v1/restaurants', (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
-    results: 0,
-    data: [],
+    data: {
+      count: 2,
+      restaurants: ['Mcdonalds', 'Burger King'],
+    },
+  });
+});
+
+app.get('/api/v1/restaurants/:id', (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    data: {
+      count: 1,
+      restaurants: ['Mcdonalds'],
+    },
   });
 });
 
