@@ -40,6 +40,17 @@ app.get('/api/v1/restaurants/:id', (req: Request, res: Response) => {
   });
 });
 
+app.post('/api/v1/restaurants', (req: Request, res: Response) => {
+  console.log(req.body);
+  res.status(200).json({
+    success: true,
+    data: {
+      count: 1,
+      restaurants: ['Mcdonalds'],
+    },
+  });
+});
+
 const port = process.env.PORT || 3020;
 
 app.listen(port, () =>
