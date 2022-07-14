@@ -21,7 +21,11 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/api/v1/restaurants', (req: Request, res: Response) => {
-  res.send('Getting Restaurants');
+  res.status(200).json({
+    success: true,
+    results: 0,
+    data: [],
+  });
 });
 
 const port = process.env.PORT || 3020;
