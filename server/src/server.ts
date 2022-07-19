@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import Restaurant from './types/restaurant';
+import db from '../db';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 
@@ -36,12 +37,14 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello Api');
 });
 
-app.get('/api/v1/restaurants', (req: Request, res: Response) => {
+app.get('/api/v1/restaurants', async (req: Request, res: Response) => {
+  const all = await db.query('SELECT * FROM restaurants');
+
   res.status(200).json({
     success: true,
     data: {
-      count: restaurants.length,
-      restaurants,
+      count: all.rowCount,
+      restaurants: all.rows,
     },
   });
 });
