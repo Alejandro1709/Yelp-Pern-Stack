@@ -1,27 +1,12 @@
 import express, { Request, Response } from 'express';
-import Restaurant from './types/restaurant';
 import db from '../db';
+import Restaurant from './types/restaurant';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
-
-const restaurants: Array<Restaurant> = [
-  {
-    id: 1,
-    name: 'Mcdonalds',
-    location: 'New Yourk, USA',
-    priceRange: 4,
-  },
-  {
-    id: 2,
-    name: 'Burguer King',
-    location: 'Las Vegas, USA',
-    priceRange: 3,
-  },
-];
 
 // Middlewares
 app.use(express.json());
@@ -38,90 +23,81 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/api/v1/restaurants', async (req: Request, res: Response) => {
-  const all = await db.query('SELECT * FROM restaurants');
+  const result = await db.query('SELECT * FROM restaurants');
+  const restaurants: Array<Restaurant> = result.rows;
 
   res.status(200).json({
     success: true,
     data: {
-      count: all.rowCount,
-      restaurants: all.rows,
+      count: result.rowCount,
+      restaurants: restaurants,
     },
   });
 });
 
-app.get('/api/v1/restaurants/:id', (req: Request, res: Response) => {
-  const foundRestaurant = restaurants.find((r) => r.id === +req.params.id);
+app.get('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await db.query('SELECT * FROM restaurants WHERE id = $1', [
+    id,
+  ]);
+
+  const restaurants: Array<Restaurant> = result.rows;
+
+  res.status(200).json({
+    success: true,
+    data: {
+      count: result.rowCount,
+      restaurant: restaurants[0],
+    },
+  });
+});
+
+app.post('/api/v1/restaurants', async (req: Request, res: Response) => {
+  const { name, location, priceRange } = req.body;
+
+  const result = await db.query(
+    'INSERT INTO restaurant (name, location, priceRange) VALUES ($1, $2, $3) RETURNING *',
+    [name, location, priceRange]
+  );
+
+  const restaurant: Restaurant = result.rows[0];
+
+  res.status(201).json({
+    success: true,
+    data: {
+      count: 1,
+      restaurants: restaurant,
+    },
+  });
+});
+
+app.patch('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
+  const { name, location, priceRange } = req.body;
+
+  const result = await db.query(
+    'UPDATE restaurants SET name = $1, location = $2, priceRange = $3 RETURNING *',
+    [name, location, priceRange]
+  );
+
+  const restaurant: Restaurant = result.rows[0];
 
   res.status(200).json({
     success: true,
     data: {
       count: 1,
-      restaurants: foundRestaurant,
+      restaurants: restaurant,
     },
   });
 });
 
-app.post('/api/v1/restaurants', (req: Request, res: Response) => {
-  const { name, location, priceRange } = req.body;
-
-  const newRestaurant: Restaurant = {
-    id: restaurants.length + 1,
-    name,
-    location,
-    priceRange,
-  };
-
-  restaurants.push(newRestaurant);
+app.delete('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  await db.query('DELETE FROM restaurants WHERE id = $1', [id]);
 
   res.status(200).json({
     success: true,
-    data: {
-      count: 1,
-      restaurants: newRestaurant,
-    },
+    data: {},
   });
-});
-
-app.patch('/api/v1/restaurants/:id', (req: Request, res: Response) => {
-  const { name, location, priceRange } = req.body;
-
-  const foundRestaurant = restaurants.find((r) => r.id === +req.params.id);
-
-  if (foundRestaurant) {
-    foundRestaurant.name = name || foundRestaurant.name;
-    foundRestaurant.location = location || foundRestaurant.location;
-    foundRestaurant.priceRange = priceRange || foundRestaurant.priceRange;
-
-    res.status(200).json({
-      success: true,
-      data: {
-        count: restaurants.length,
-        restaurants: restaurants,
-      },
-    });
-  } else {
-    console.log('Restaurant not found');
-  }
-});
-
-app.delete('/api/v1/restaurants/:id', (req: Request, res: Response) => {
-  const foundRestaurant = restaurants.find((r) => r.id === +req.params.id);
-
-  if (foundRestaurant) {
-    const filteredRestaurants = restaurants.filter(
-      (restaurant) => restaurant.id !== foundRestaurant.id
-    );
-
-    res.status(200).json({
-      success: true,
-      data: {
-        count: filteredRestaurants.length,
-        restaurants: filteredRestaurants,
-      },
-    });
-  } else {
-    console.log('Restaurant not found');
-  }
 });
 
 const port = process.env.PORT || 3020;
