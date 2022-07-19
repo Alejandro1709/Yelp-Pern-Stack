@@ -53,11 +53,11 @@ app.get('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
 });
 
 app.post('/api/v1/restaurants', async (req: Request, res: Response) => {
-  const { name, location, priceRange } = req.body;
+  const { name, location, price_range } = req.body;
 
   const result = await db.query(
-    'INSERT INTO restaurant (name, location, priceRange) VALUES ($1, $2, $3) RETURNING *',
-    [name, location, priceRange]
+    'INSERT INTO restaurants (name, location, price_range) VALUES ($1, $2, $3) RETURNING *',
+    [name, location, price_range]
   );
 
   const restaurant: Restaurant = result.rows[0];
@@ -72,11 +72,12 @@ app.post('/api/v1/restaurants', async (req: Request, res: Response) => {
 });
 
 app.patch('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
-  const { name, location, priceRange } = req.body;
+  const { id } = req.params;
+  const { name, location, price_range } = req.body;
 
   const result = await db.query(
-    'UPDATE restaurants SET name = $1, location = $2, priceRange = $3 RETURNING *',
-    [name, location, priceRange]
+    'UPDATE restaurants SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *',
+    [name, location, price_range, id]
   );
 
   const restaurant: Restaurant = result.rows[0];
