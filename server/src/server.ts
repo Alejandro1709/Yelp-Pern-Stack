@@ -23,82 +23,104 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/api/v1/restaurants', async (req: Request, res: Response) => {
-  const result = await db.query('SELECT * FROM restaurants');
-  const restaurants: Array<Restaurant> = result.rows;
+  try {
+    const result = await db.query('SELECT * FROM restaurants');
+    const restaurants: Array<Restaurant> = result.rows;
 
-  res.status(200).json({
-    success: true,
-    data: {
-      count: result.rowCount,
-      restaurants: restaurants,
-    },
-  });
+    res.status(200).json({
+      success: true,
+      data: {
+        count: result.rowCount,
+        restaurants: restaurants,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 app.get('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await db.query('SELECT * FROM restaurants WHERE id = $1', [
-    id,
-  ]);
 
-  const restaurants: Array<Restaurant> = result.rows;
+  try {
+    const result = await db.query('SELECT * FROM restaurants WHERE id = $1', [
+      id,
+    ]);
 
-  res.status(200).json({
-    success: true,
-    data: {
-      count: result.rowCount,
-      restaurant: restaurants[0],
-    },
-  });
+    const restaurants: Array<Restaurant> = result.rows;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        count: result.rowCount,
+        restaurant: restaurants[0],
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.post('/api/v1/restaurants', async (req: Request, res: Response) => {
   const { name, location, price_range } = req.body;
 
-  const result = await db.query(
-    'INSERT INTO restaurants (name, location, price_range) VALUES ($1, $2, $3) RETURNING *',
-    [name, location, price_range]
-  );
+  try {
+    const result = await db.query(
+      'INSERT INTO restaurants (name, location, price_range) VALUES ($1, $2, $3) RETURNING *',
+      [name, location, price_range]
+    );
 
-  const restaurant: Restaurant = result.rows[0];
+    const restaurant: Restaurant = result.rows[0];
 
-  res.status(201).json({
-    success: true,
-    data: {
-      count: 1,
-      restaurants: restaurant,
-    },
-  });
+    res.status(201).json({
+      success: true,
+      data: {
+        count: 1,
+        restaurants: restaurant,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 app.patch('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, location, price_range } = req.body;
 
-  const result = await db.query(
-    'UPDATE restaurants SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *',
-    [name, location, price_range, id]
-  );
+  try {
+    const result = await db.query(
+      'UPDATE restaurants SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *',
+      [name, location, price_range, id]
+    );
 
-  const restaurant: Restaurant = result.rows[0];
+    const restaurant: Restaurant = result.rows[0];
 
-  res.status(200).json({
-    success: true,
-    data: {
-      count: 1,
-      restaurants: restaurant,
-    },
-  });
+    res.status(200).json({
+      success: true,
+      data: {
+        count: 1,
+        restaurants: restaurant,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.delete('/api/v1/restaurants/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  await db.query('DELETE FROM restaurants WHERE id = $1', [id]);
 
-  res.status(200).json({
-    success: true,
-    data: {},
-  });
+  try {
+    await db.query('DELETE FROM restaurants WHERE id = $1', [id]);
+
+    res.status(200).json({
+      success: true,
+      data: {},
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 const port = process.env.PORT || 3020;
