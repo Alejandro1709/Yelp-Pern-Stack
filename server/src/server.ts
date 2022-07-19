@@ -79,6 +79,48 @@ app.post('/api/v1/restaurants', (req: Request, res: Response) => {
   });
 });
 
+app.patch('/api/v1/restaurants/:id', (req: Request, res: Response) => {
+  const { name, location, priceRange } = req.body;
+
+  const foundRestaurant = restaurants.find((r) => r.id === +req.params.id);
+
+  if (foundRestaurant) {
+    foundRestaurant.name = name || foundRestaurant.name;
+    foundRestaurant.location = location || foundRestaurant.location;
+    foundRestaurant.priceRange = priceRange || foundRestaurant.priceRange;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        count: restaurants.length,
+        restaurants: restaurants,
+      },
+    });
+  } else {
+    console.log('Restaurant not found');
+  }
+});
+
+app.delete('/api/v1/restaurants/:id', (req: Request, res: Response) => {
+  const foundRestaurant = restaurants.find((r) => r.id === +req.params.id);
+
+  if (foundRestaurant) {
+    const filteredRestaurants = restaurants.filter(
+      (restaurant) => restaurant.id !== foundRestaurant.id
+    );
+
+    res.status(200).json({
+      success: true,
+      data: {
+        count: filteredRestaurants.length,
+        restaurants: filteredRestaurants,
+      },
+    });
+  } else {
+    console.log('Restaurant not found');
+  }
+});
+
 const port = process.env.PORT || 3020;
 
 app.listen(port, () =>
