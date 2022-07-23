@@ -1,0 +1,29 @@
+.alert {
+  padding: 1rem;
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+.alert--success {
+  background-color: rgb(119, 211, 119);
+  font-weight: 500;
+  color: white;
+}
+
+.alert--warning {
+  background-color: rgb(220, 220, 56);
+  font-weight: 500;
+  color: white;
+}
+
+.alert--danger {
+  background-color: rgb(226, 33, 33);
+  font-weight: 500;
+  color: white;
+}
+
+.alert--info {
+  background-color: rgb(76, 94, 235);
+  font-weight: 500;
+  color: white;
+}
