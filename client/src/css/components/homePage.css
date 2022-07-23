@@ -1,2 +1,38 @@
 .homePage {
 }
+
+.homePage__section {
+}
+
+.homePage__form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+table {
+  width: 100%;
+  border-spacing: 30px;
+  border: 1px solid black;
+}
+
+table,
+th,
+td {
+  font-size: 1rem;
+  border: 1px solid black;
+  padding: 0.5rem;
+  border-collapse: collapse;
+}
+
+th {
+  color: white;
+  background-color: #333;
+}

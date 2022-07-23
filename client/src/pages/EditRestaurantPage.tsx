@@ -1,6 +1,6 @@
 import React from 'react';
 
-function EditRestaurantPage() {
+function EditRestaurantPage(): JSX.Element {
   return <div>EditRestaurantPage</div>;
 }
 
