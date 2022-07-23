@@ -1,8 +1,8 @@
-.homePage {
+/* .homePage {
 }
 
 .homePage__section {
-}
+} */
 
 .homePage__form {
   display: flex;
@@ -21,6 +21,7 @@ table {
   width: 100%;
   border-spacing: 30px;
   border: 1px solid black;
+  user-select: none;
 }
 
 table,
