@@ -7,6 +7,10 @@ function HomePage(): JSX.Element {
 
   return (
     <div className='homePage container'>
+      <div className='flex justify-between alert alert--info my-2'>
+        <p>This is an alert</p>
+        <span>X</span>
+      </div>
       <h1 className='heading--xxl mb-2'>All Restaurants</h1>
       <section className='homePage__section section-md'>
         <Link to='/restaurants/new'>New Restaurant</Link>

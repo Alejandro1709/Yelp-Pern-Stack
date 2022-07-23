@@ -1,3 +1,20 @@
+/* Flex & Grid */
+.flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
 /* Margins & Paddings */
 .mb-1 {
   margin-bottom: 1rem;
@@ -13,4 +30,12 @@
 
 .mt-2 {
   margin-top: 2rem;
+}
+
+.my-1 {
+  margin: 1rem 0;
+}
+
+.my-2 {
+  margin: 2rem 0;
 }
