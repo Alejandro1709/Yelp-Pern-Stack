@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import restaurantRoutes from './routes/restaurant.routes';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 
@@ -15,13 +16,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Routes
+app.use('/api/v1/restaurants', restaurantRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello Api');
-});
-
-app.get('/api/v1/restaurants', (req: Request, res: Response) => {
-  res.send('Getting Restaurants');
 });
 
 const port = process.env.PORT || 3020;
