@@ -8,7 +8,7 @@ function HomePage(): JSX.Element {
   const [restaurantss, setRestaurantss] = useState(restaurants);
 
   return (
-    <div className='homePage container'>
+    <div className='homePage container mt-2'>
       <Alert message='Testing' variant='info' />
       <h1 className='heading--xxl mb-2'>All Restaurants</h1>
       <section className='homePage__section section-md'>
